@@ -1,0 +1,45 @@
+<?php
+/**
+ * Created by PhpStorm.
+ * User: gaolin
+ * Date: 3/20/17
+ * Time: 12:41 AM
+ */
+
+
+
+//use Models\Bean\AllocateTime;
+//use Models\Db as db;
+//Use Models\Helper as Helper;
+include_once ROOT. "/app/Models/db/DatabaseManager.php";
+include_once ROOT. "/app/Models/bean/AllocateTime.php";
+include_once ROOT. "/app/Models/helper/TimeSlotHelper.php";
+
+/**
+ * Class DeleteTimeSlotController : This class just has one static method to support other controllers' deleting TimeSlot
+ * @package App\Controllers
+ */
+
+
+class DeleteTimeSlotController
+{
+    public static function deleteTimeSlot($date, $startTime, $endTime, $emailOrName, $repeat, $reason){
+        $time = new AllocateTime();
+        $time->setDate($date);
+        $time->setStartTime($startTime);
+        $time->setEndTime($endTime);
+        $time->setEmail($emailOrName);
+        $time->setReasons($reason);
+
+        $dbm = new DatabaseManager();
+        $dbm->deleteTimeSlot($time);
+
+        if($repeat !=0 && $repeat!=null){
+            for($i = 0 ; $i<$repeat; $i++){
+                $time->setDate(TimeSlotHelper::addDate($time->getDate(),1) );
+                $dbm ->deleteTimeSlot($time);
+            }
+        }
+    }
+
+}

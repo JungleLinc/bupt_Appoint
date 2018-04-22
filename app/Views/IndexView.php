@@ -1,0 +1,24 @@
+<?php
+include ("template/header.php");
+$role = isset($_SESSION['role']) ? $_SESSION['role'] : "visitor";
+include ("template/" . $role . "_navigation.php");
+$advisingController = mav_encrypt("advising");
+$getAdvisingInfoAction = mav_encrypt("getAdvisingInfo");
+?>
+
+
+<div class="container">
+    <div class="jumbotron masthead">
+        <img src="app/Views/img/mavlogo.gif" style=";padding:30px;float:left;">
+        <h1><font style="color: #e67e22;font-size:72px;"> BUPT-Appointment </font></h1>
+        <p>This advising system is used by Beijing University of Posts and Telecommunications only.</p>
+        <?php if($role == ""){ ?>
+        <a href="?c=<?php echo $advisingController?>&a=<?php echo $getAdvisingInfoAction?>" class="btn btn-primary btn-lg">开始预约</a>
+        <?php	}else if($role != "advisor" && $role != "admin"){ ?>
+        <a href="?c=<?php echo $advisingController?>&a=<?php echo $getAdvisingInfoAction?>" class="btn btn-primary btn-lg">开始预约</a>
+        <?php } ?>
+        
+    </div>
+</div>
+
+<?php include ("template/footer.php"); ?>
